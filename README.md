@@ -1,148 +1,35 @@
-HEALTH CLINIC MANAGEMENT SYSTEM
-MySQL + Streamlit
+Health Clinic Management System
+MySQL • Streamlit • DB-Driven Logic
 
-A simple end-to-end clinic workflow application demonstrating DB-driven logic, CRUD operations, and a Streamlit UI.
+Overview
 
-REQUIREMENTS
+This project implements an end-to-end clinic workflow system using MySQL for data management and Streamlit for the user interface. It models real-world clinic operations such as patient registration, appointment scheduling, medical visits, prescriptions, and billing. Core business rules are enforced directly in the database via triggers, stored procedures, and functions, ensuring data integrity and consistent behavior. The Streamlit interface allows users to interact with the system easily without writing SQL.
 
-Python 3.10+
+Database Summary
 
-MySQL 8.x + MySQL Workbench
+The database stores all clinic-related information. Records are linked through primary and foreign key relationships to preserve consistency.
 
-VS Code (recommended)
+Key tables include:
+patients (personal details), doctors (specialization and contact), rooms (consultation allocation), appointments (scheduled visits), visits (post-appointment records), prescriptions (medicine assignment), medications (inventory details), invoices (billing information), and payments (tracking bill settlement).
 
-Web browser
+Important fields: patient details, doctor specialization, appointment dates and times, medication stock/price, visit diagnosis, invoice totals, and payment method.
 
-PROJECT STRUCTURE
-clinic-app/
-app.py
-config.py
-config_example.py
-test_connect.py
-mini_query.py
-README.md
+Business-rule constraints ensure data validity. For example, appointments cannot overlap for the same doctor or room, medication stock cannot drop below zero, and invoice status automatically updates once payments meet or exceed the total amount.
 
-db/
-    clinic_setup.sql
+Features Implemented
 
-.venv/
+The system supports core clinic workflows. Users can register patients and doctors, schedule and complete appointments, and record prescriptions. Medication inventory is automatically updated when prescriptions are added. Invoices are generated based on visit details, and payments update invoice status in real time.
 
+Rules are handled through stored procedures and triggers, such as scheduling checks, DOB validation, visit creation after appointment completion, automatic stock reduction, and invoice settlement status.
 
-DATABASE SETUP
+Evaluation
 
-Open MySQL Workbench.
-Create a new SQL tab.
-Run the file:
-db/clinic_setup.sql
+Because the logic resides inside the database, clinical operations remain consistent regardless of user interface. Data validation, logical constraints, and business operations are handled reliably using procedures and triggers, preventing errors like double-booking and invalid billing. This design supports clean CRUD workflows and dependable behavior during demonstrations or production extension.
 
-This creates:
+How It Works (High Level)
 
-database clinic_db
+The database is created first and contains all clinic logic. Users operate the system through Streamlit: they enter patient details, create appointments, complete visits, add prescriptions, and settle invoices. Behind the scenes, database routines enforce rules such as preventing scheduling conflicts and updating medication inventory. The interface simply calls the database and displays results.
 
-schema tables
+Requirements
 
-triggers, functions, procedures
-
-sample data
-
-(Optional) Create a dedicated database user:
-CREATE USER IF NOT EXISTS 'clinic_user'@'localhost' IDENTIFIED BY 'StrongPass123!';
-GRANT ALL PRIVILEGES ON clinic_db.* TO 'clinic_user'@'localhost';
-FLUSH PRIVILEGES;
-
-CREATE VIRTUAL ENVIRONMENT
-
-Inside clinic-app folder:
-python -m venv .venv
-
-Activate (Windows PowerShell):
-. ..venv\Scripts\Activate.ps1
-
-INSTALL DEPENDENCIES
-
-pip install streamlit mysql-connector-python pandas
-
-CONFIGURE DATABASE CREDENTIALS
-
-Copy config_example.py → rename to config.py.
-Edit config.py with real values:
-
-HOST = "localhost"
-USER = "clinic_user"
-PASSWORD = "StrongPass123!"
-DATABASE = "clinic_db"
-PORT = 3306
-
-
-Keep config.py private. Do not commit it to Git.
-
-TEST DATABASE CONNECTION
-
-python test_connect.py
-
-Expected output:
-Connected!
-Database: clinic_db
-MySQL version: ...
-
-If it fails:
-
-Check username and password
-
-Ensure MySQL service is running
-
-Confirm PORT is correct
-
-RUN THE APPLICATION
-
-streamlit run app.py
-
-A browser tab should open automatically.
-If not, manually visit: http://localhost:8501
-
-APPLICATION WORKFLOW
-
-Within Streamlit UI:
-
-Add patients
-
-Add doctors
-
-Schedule appointments (overlap protection)
-
-Complete appointments (visit automatically created)
-
-Add prescriptions (medication stock decreases)
-
-Generate invoices
-
-Record payments (invoice automatically marked paid)
-
-View upcoming appointments
-
-View low-stock medications
-
-RESETTING DATABASE
-
-Re-run:
-db/clinic_setup.sql
-
-This drops and recreates everything.
-
-NOTES
-
-Most business logic (scheduling rules, stock updates, invoice status changes, DOB checks) is enforced inside the database using triggers, stored procedures, and functions.
-
-Streamlit handles user interface and calls to the database.
-
-This project demonstrates:
-
-CRUD operations
-
-Stored procedures
-
-Functions
-
-Triggers
-
-Basic reporting
+The project requires Python 3.10 or higher. MySQL 8.x is used for data storage. Streamlit powers the UI, and mysql-connector-python enables communication between Python and MySQL. Other tools such as pandas may be used for handling data and simple reporting.
