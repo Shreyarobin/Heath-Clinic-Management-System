@@ -1,4 +1,4 @@
-Health Clinic Management System
+# Health Clinic Management System
 MySQL • Streamlit • DB-Driven Logic
 
 Overview
